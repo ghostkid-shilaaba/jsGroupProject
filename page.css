@@ -1,8 +1,14 @@
  @import url(https://fonts.googleapis.com/css2?family=Fugaz+One&family=Michroma&display=swap);
-body {
+ html {
+    height: 100%;
+ }
+ body {
  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),url('https://media.istockphoto.com/id/1361831751/photo/empty-movie-theater-with-neon-lights.jpg?s=612x612&w=0&k=20&c=s2S4mMOJI_ShAUHLMpa3KJLsFUS6iBakeSa8YHOGBUI=');
  background-repeat: no-repeat;
  background-size: cover;
+ margin: 0;
+ padding: 0;
+ height: 100%;
 }
 .title {
     text-align: center;
@@ -42,18 +48,183 @@ body {
     padding-right: 6rem;
     border: none;
     border-radius: 5px 0 0 5px;
-    line-height: 1.35;
+    line-height: 1.335;
+    outline: none;
+    padding-left: 1rem;
 }
 .search-input::-webkit-search-cancel-button {
  -webkit-appearance: none;
-    appearance: none;}
+    appearance: none;
+}
+.search-input:focus::placeholder {
+  opacity: 0;
+}
 .search-submit:hover {
-    background-color: #42146a;
+    background-color:#1d1d1d;
+    color: #42146a;
 }
 .search-input:hover{
     background-color: #1d1d1d;
 }
 .first-search{
     font-size: 1.4rem;
+}
+footer {
+    margin-top: 35rem;
+} 
+h3 {
+    font-size: 28px;
+    padding-left: 0.7rem;
+    padding-bottom: none;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.desc {
+    font-size: 18px;
+    padding-left: 0.3rem;
+    padding-right: 2rem;
+}
+ol {
+    margin-top: 0;
+}
+.list {
+    font-size: 20px;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+.sign:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #7440a2;
+}
+.sublist{
+    font-size: 1.1rem;
+}
+.mainpage{
+    display: none;
+}
+/*home page starts here*/
+.navbar {
+    display: flex;
+    background-color: #42146a;
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    align-items: center;
+}
+.rightside{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-left: auto;
+
+}
+.pfp {
+    height: 2.7rem;
+    width: 2.7rem;
+}
+.userinfo{
+    display: inline-flex;        
+    justify-content: right;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: .7em;
+    padding-left: .1rem;
+    box-sizing: border-box;
+    border-radius: 2rem;
+    margin-right: .7rem;
+
+}
+.userinfo:hover{
+    cursor: pointer;
+    background-color: #7440a2;
+}
+.mode {
+    margin-right: 1.5rem;
+    height: 2.5rem;
+    width: 2.5rem;
+    margin-bottom: .15rem;
+    border-radius: 1.1rem;
+    box-sizing: content-box;
+}
+.mode:hover{
+    cursor: pointer;
+    background-color: #7440a2;
+}
+.genres{
+    size: 10rem;
+    margin-left: 1.7rem;
+    padding: .1rem;
+    height:1.7rem;
+    width: 7rem;
+    background: transparent;
+    border: .7rem #3a0c63;
+    border-radius: .7rem;
+}
+.genres:hover{
+    cursor: pointer;
+}
+.leftside{
+    display: flex;
+    align-items: center;
+    margin-left: 1rem;
+}
+.hamburger-menu {
+    box-sizing: border-box;
+    display: inline-flex;
+    font-size: 1.5rem;
+    background-color: transparent;
+    border: none;
+    align-items: center;
+    padding: .5rem .5rem .5rem .5rem;
+}
+.hamburger-menu:hover{
+    background-color: #7440a2;
+    cursor: pointer;
+    border-radius: 1rem;
+}
+.second-searchbar{
+    display: inline-flex;        
+    justify-content: right;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 1.5rem;
+}
+.second-input{
+    line-height: 1.9;
+    padding-right: 7rem;
+}
+.second-submit{
+    line-height: 1.9;
+    padding-left: .5rem;
+}
+.hamburger-pess {
+    padding-top: auto;
+    background-color:  #42146a;
+    max-width: fit-content;
+    padding-right: 2rem;
+    border: none;
+    outline: none;
+    border-radius: 0rem 0rem .7rem .7rem;
+    display: none;
+}
+.second-list {
+    list-style-type: none;
+    padding-left: 1rem;
+    margin-top: 0;
+    margin-bottom: .5rem;
+    padding-bottom: .2rem;
+}
+.second-sublist {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    padding-left: .2rem;
+    padding-right: .2rem;
+    text-align: center;
+}
+.second-sublist:hover {
+    background-color: #7440a2;
+    border-radius: .3rem;
+    cursor: pointer;
 }
 
