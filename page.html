@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="page.css">
 </head>
 <body>
-    <div class="main">
+    <div class="mainpage">
     <h1 class="title">Track<span class="subtitle">Watch</span></h1>
     <div class="firstlist">
     <p class="mpstuff">Home</p>
     <p class="mpstuff">Trending</p>
     <p class="mpstuff">Actors</p>
-    <p class="mpstuff">Latests</p>
+    <p class="mpstuff">Latest</p>
     <p class="mpstuff">Kpi</p>
     </div>
     <div class="first-searchbar">
@@ -22,34 +22,66 @@
     </div>
     <footer>
         <h3>🎬 Who Are We? Welcome to TrackWatch!</h3>
-        <p>We are TrackWatch—your dedicated digital hub for tracking, discovering, and celebrating the movies and TV shows you love.
+        <p class="desc">We are TrackWatch—your dedicated digital hub for tracking, discovering, and celebrating the movies and TV shows you love.
         We built TrackWatch because we believe your entertainment journey deserves to be as organized and personalized as possible. Tired of forgetting which episode you left off on, or scrolling endlessly to find your next obsession? We solved that.</p>
         <h3>Our Mission: Your Ultimate Entertainment Tracker</h3>
-        <p>Our goal is simple: to be the most comprehensive and user-friendly platform for tracking your film and series consumption, making sure you spend less time managing your watchlist and more time enjoying it.</p>
+        <p class="desc">Our goal is simple: to be the most comprehensive and user-friendly platform for tracking your film and series consumption, making sure you spend less time managing your watchlist and more time enjoying it.</p>
         <h3>✨ What Makes TrackWatch Different?</h3>
         <ol>
-            <li>Comprehensive Database & Discovery</li>
+            <li class="list">Comprehensive Database & Discovery</li>
             <ul>
-                <li>Vast Library: Access a huge collection of movies and TV shows.</li>
-                <li>Detailed Information: Get essential data on every title, including summaries, cast lists, and release details.</li>
-                <li>Actor Insights: Dive into the full filmography of your favorite actors and discover their past work.</li>
+                <li class="sublist">Vast Library: Access a huge collection of movies and TV shows.</li>
+                <li  class="sublist">Detailed Information: Get essential data on every title, including summaries, cast lists, and release details.</li>
+                <li  class="sublist">Actor Insights: Dive into the full filmography of your favorite actors and discover their past work.</li>
             </ul>
-            <li>Personalized Organization</li>
+            <li class="list">Personalized Organization</li>
             <ul>
-                <li>Watchlist Management: Keep track of all the movies and shows you want to see in one organized place.</li>
-                <li>Saving Favorites: Easily save your all-time favorite titles and actors to custom, quickly-accessible lists.</li>
+                <li  class="sublist">Watchlist Management: Keep track of all the movies and shows you want to see in one organized place.</li>
+                <li  class="sublist">Saving Favorites: Easily save your all-time favorite titles and actors to custom, quickly-accessible lists.</li>
             </ul>
-            <li>Seamless User Experience</li>
+            <li class="list">Seamless User Experience</li>
             <ul>
-                <li>User Login: Your lists, favorites, and activity are securely saved to your personal account, accessible from any device.</li>
-                <li>Easy Interface: A clean, intuitive design makes it simple to find what you need and update your lists quickly.</li>
+                <li  class="sublist">User Login: Your lists, favorites, and activity are securely saved to your personal account, accessible from any device.</li>
+                <li  class="sublist">Easy Interface: A clean, intuitive design makes it simple to find what you need and update your lists quickly.</li>
             </ul>
         </ol>
         <h3>💖 The Vibe: Your Personal Entertainment Hub</h3>
-        <p>We provide the tools you need to organize your viewing life and discover new content, all in one place. We focus on simplicity, breadth of data, and making it easy to save what matters most to you.
+        <p class="desc">We provide the tools you need to organize your viewing life and discover new content, all in one place. We focus on simplicity, breadth of data, and making it easy to save what matters most to you.
         TrackWatch is for anyone who values organization, discovery, and never having to hunt down basic details about their favorite media again.</p><hr>
-        <p>Ready to start organizing your entertainment journey? Sign up today and take control of your watchlist!</p>
+        <p class="desc">Ready to start organizing your entertainment journey? <span class="sign">Sign up</span> today and take control of your watchlist!</p>
     </footer>
     </div>
+    <!--home page starts here-->
+    <div class="homepage">
+        <div class="navbar">
+            <div class="leftside">
+                <button class="hamburger-menu"> &#9776;</button>
+                <div class="second-searchbar">
+                    <input class="search-input second-input" type="search" placeholder="search">
+                    <button class="search-submit second-submit">🔍︎</button>
+                </div>
+                <select class="genres" name="genres">
+                <option value="">filter</option>
+            </select>
+            </div>
+            <div class="rightside">
+             <img class="mode"src="https://cdn-icons-png.flaticon.com/512/3171/3171766.png" >
+            <div class="userinfo">
+                <img class="pfp" src="https://cdn-icons-png.freepik.com/512/9307/9307950.png">
+                <p class="sign">sign in</p>
+            </div>
+            </div>
+        </div>
+        <div class="hamburger-pess">
+                <ul class="second-list">
+                    <li class="second-sublist">Home</li>
+                    <li class="second-sublist">Trending</li>
+                    <li class="second-sublist">Actors</li>
+                    <li class="second-sublist">Latest</li>
+                    <li class="second-sublist">Kpi</li>
+                </ul>
+            </div>
+    </div>
+<script src="page.js"></script>
 </body>
 </html>
