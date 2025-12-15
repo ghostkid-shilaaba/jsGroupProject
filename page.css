@@ -1,14 +1,19 @@
- @import url(https://fonts.googleapis.com/css2?family=Fugaz+One&family=Michroma&display=swap);
+ @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
  html {
-    height: 100%;
+    height: 100vh;
  }
  body {
- background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),url('https://media.istockphoto.com/id/1361831751/photo/empty-movie-theater-with-neon-lights.jpg?s=612x612&w=0&k=20&c=s2S4mMOJI_ShAUHLMpa3KJLsFUS6iBakeSa8YHOGBUI=');
+ background-color: rgba(0, 0, 0, 0.8);
+ background-image: url('https://media.istockphoto.com/id/1361831751/photo/empty-movie-theater-with-neon-lights.jpg?s=612x612&w=0&k=20&c=s2S4mMOJI_ShAUHLMpa3KJLsFUS6iBakeSa8YHOGBUI=');
  background-repeat: no-repeat;
  background-size: cover;
+ background-blend-mode: darken;
  margin: 0;
  padding: 0;
- height: 100%;
+ background-attachment: fixed; /*force pic to cover the whole page*/
+ font-family: 'Inter';
+ font-weight:500;
+ color: #EDEDED;
 }
 .title {
     text-align: center;
@@ -83,6 +88,7 @@ h3 {
     font-size: 18px;
     padding-left: 0.3rem;
     padding-right: 2rem;
+    text-shadow: #3a0c63;
 }
 ol {
     margin-top: 0;
@@ -95,13 +101,13 @@ ol {
 .sign:hover {
     text-decoration: underline;
     cursor: pointer;
-    color: #7440a2;
+    color: #CBB7FF;
 }
 .sublist{
     font-size: 1.1rem;
 }
 .mainpage{
-    display: none;
+    display: block;
 }
 /*home page starts here*/
 .navbar {
@@ -169,6 +175,10 @@ ol {
     align-items: center;
     margin-left: 1rem;
 }
+.hamburger{
+    padding: 0rem 0rem .7rem 0rem;
+    margin: .5rem .5rem 0rem .5rem;
+}
 .hamburger-menu {
     box-sizing: border-box;
     display: inline-flex;
@@ -176,12 +186,13 @@ ol {
     background-color: transparent;
     border: none;
     align-items: center;
-    padding: .5rem .5rem .5rem .5rem;
+    color: #EDEDED;
 }
 .hamburger-menu:hover{
+    color: #CBB7FF;
     background-color: #7440a2;
     cursor: pointer;
-    border-radius: 1rem;
+    border-radius: .2rem;
 }
 .second-searchbar{
     display: inline-flex;        
@@ -223,8 +234,36 @@ ol {
     text-align: center;
 }
 .second-sublist:hover {
+    color: #CBB7FF;
     background-color: #7440a2;
     border-radius: .3rem;
     cursor: pointer;
+}
+.mvelement {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: column;
+    padding: .7rem .7rem 0rem .7rem;
+}
+.mvpic img {
+    height: 100%;
+    width: 100%;
+    border: #3a0c63
+}
+.mvpic {
+    box-sizing: border-box;
+    align-items: center;
+    height:18rem;
+    width: auto;
+}
+.mvname {
+    text-align: center;
+}
+.mvelement:hover{
+    background-color: #CBB7FF;
+    border-radius: .7rem;
+}
+.homepage{
+    display: none;
 }
 
