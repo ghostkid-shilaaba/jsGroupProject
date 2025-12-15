@@ -239,6 +239,9 @@ ol {
     border-radius: .3rem;
     cursor: pointer;
 }
+.movies{
+    margin-left: .7rem;
+}
 .mvelement {
     display: inline-flex;
     align-items: center;
@@ -246,8 +249,8 @@ ol {
     padding: .7rem .7rem 0rem .7rem;
 }
 .mvpic img {
-    height: 100%;
-    width: 100%;
+    height: 18rem;
+    width: 12rem;
     border: #3a0c63
 }
 .mvpic {
@@ -258,6 +261,7 @@ ol {
 }
 .mvname {
     text-align: center;
+    max-width: 12rem;
 }
 .mvelement:hover{
     background-color: #CBB7FF;
