@@ -202,12 +202,13 @@ ol {
     margin-left: 1.5rem;
 }
 .second-input{
-    line-height: 1.9;
-    padding-right: 7rem;
+    line-height: 2rem;
+    padding-right: 14rem;
 }
 .second-submit{
-    line-height: 1.9;
-    padding-left: .5rem;
+    line-height: 2rem;
+    padding-left: .7rem;
+    text-align: center;
 }
 .hamburger-pess {
     padding-top: auto;
@@ -240,7 +241,7 @@ ol {
     cursor: pointer;
 }
 .movies{
-    margin-left: .7rem;
+    margin: .7rem .7rem 0rem .7rem;
 }
 .mvelement {
     display: inline-flex;
@@ -266,6 +267,11 @@ ol {
 .mvelement:hover{
     background-color: #CBB7FF;
     border-radius: .7rem;
+}
+.pages{
+    display: inline-flex;
+    align-items: center;
+    max-width: 10rem;
 }
 .homepage{
     display: none;
