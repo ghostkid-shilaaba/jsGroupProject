@@ -37,7 +37,11 @@ homebutton.addEventListener("click",function(){
     mainpage.style.display="none";
 })
 
-fetch("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",options)//awwal page
+const pageload = function(p){
+    let currentpage=p;
+    movies.innerHTML = " ";
+    pages.innerHTML=" ";
+    fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${currentpage}`,options)//awwal page
     .then(response => response.json())
         .then(d => {
           d.results.forEach(movie => {
@@ -47,43 +51,27 @@ fetch("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",options
                 <div class="mvname"><p>${movie.title}</p></div>
             </div>`
             });
-        })
-    .catch(error => console.error(error));
-
-fetch("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",options) //pagenumberthingy
-    .then(res=>res.json())
-    .then(d=> {
-        let currentpage=1;
-        const lastpage=d.total_pages;
+            const lastpage=d.total_pages;
         for(let i=currentpage-3;i<currentpage;++i){
-            if (i<=1){break;}
+            if (i<=1){continue;}
             pages.innerHTML+=`<button class="page-number">${i}</button>`;
         }
         for(let i=currentpage;i<currentpage+4;++i){
-            if (i==lastpage){break;}
+            if (i==lastpage){continue;}
             pages.innerHTML+=`<button class="page-number">${i}</button>`;
         }
-        const pagebuttons=document.querySelectorAll(".page-number");// bttons yllh ki tcreaw f had fetch so maghaykhdmoch brra must be declared hna darori
-        pagebuttons.forEach(pagebutton => { // cuz pagebuttons returns object so darori boucle bach nparcouri f kolla elem
-        pagebutton.addEventListener("click",function(){
-        const pagenumber =pagebutton.textContent;
-        movies.innerHTML="";
-        fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${pagenumber}`,options)
-        .then(response => response.json())
-        .then(d => {
-          d.results.forEach(movie => {
-            movies.innerHTML+=
-            `<div class="mvelement">
-                <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${movie.poster_path}"></div>
-                <div class="mvname"><p>${movie.title}</p></div>
-            </div>`
+        const pagebuttons=document.querySelectorAll(".page-number"); //bttons yllh ki tcreaw f had fetch so maghaykhdmoch brra must be declared hna darori
+            pagebuttons.forEach(el => {
+                el.addEventListener("click", function(){
+                    currentpage = Number(el.textContent);
+                    pageload(currentpage);
+                })
             });
         })
     .catch(error => console.error(error));
-})//mn ftch l hna haja whda btw
-});
-    })
-    .catch(error => console.error(error));
+}
+pageload(1);
+
 
 fetch("https://api.themoviedb.org/3/genre/movie/list?language=en",options)//genres part
     .then(res => res.json())
@@ -94,4 +82,6 @@ fetch("https://api.themoviedb.org/3/genre/movie/list?language=en",options)//genr
             });
         })
     .catch(error => console.error(error));
+
+
 
