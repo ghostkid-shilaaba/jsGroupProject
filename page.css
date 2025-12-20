@@ -3,17 +3,23 @@
     height: 100vh;
  }
  body {
- background-color: rgba(0, 0, 0, 0.8);
- background-image: url('https://media.istockphoto.com/id/1361831751/photo/empty-movie-theater-with-neon-lights.jpg?s=612x612&w=0&k=20&c=s2S4mMOJI_ShAUHLMpa3KJLsFUS6iBakeSa8YHOGBUI=');
+ background-color: rgba(0, 0, 0, 0.5);
+ background-image: url("usedpics/darkmode.png");
  background-repeat: no-repeat;
  background-size: cover;
  background-blend-mode: darken;
  margin: 0;
  padding: 0;
- background-attachment: fixed; /*force pic to cover the whole page*/
+ background-attachment: fixed; 
  font-family: 'Inter';
  font-weight:500;
  color: #EDEDED;
+ transition: .3s;
+}
+body.othermode{
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("usedpics/lightmode.png");
+    color: black;
 }
 .title {
     text-align: center;
@@ -117,6 +123,10 @@ ol {
     padding: 0;
     box-sizing: border-box;
     align-items: center;
+    transition: .3s;
+}
+.navbar.othermode{
+    background-color: #bf73d6;
 }
 .rightside{
     display: flex;
@@ -221,6 +231,9 @@ ol {
     display: none;
     position: absolute;
 }
+.hamburger-pess.othermode{
+    background-color: #bf73d6;
+}
 .second-list {
     list-style-type: none;
     padding-left: 1rem;
@@ -251,19 +264,19 @@ ol {
     padding: .7rem .7rem 0rem .7rem;
 }
 .mvpic img {
-    height: 18rem;
-    width: 12rem;
+    height: 21rem;
+    width: 14rem;
     border: #3a0c63
 }
 .mvpic {
     box-sizing: border-box;
     align-items: center;
-    height:18rem;
-    width: auto;
+    height:21rem;
+    width: 14rem;
 }
 .mvname {
     text-align: center;
-    max-width: 12rem;
+    max-width: 14rem;
 }
 .mvelement:hover{
     background-color: #CBB7FF;
@@ -277,6 +290,8 @@ ol {
     align-items: center;
     max-width: fit-content;
     background-color: #3a0c63;
+    border-radius: 1rem;
+    padding: .2rem .5rem .2rem .5rem;
 }
 .page-number{
     font-size: 1.3rem;
@@ -290,5 +305,152 @@ ol {
 .homepage{
     display: none;
 }
+/* actors page */
+.actorsinfo {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: column;
+    padding: .7rem .7rem 0rem .7rem;
+}
+.actors::-webkit-scrollbar {
+    height: 8px;
+}
+.actors::-webkit-scrollbar-thumb {
+    background: #8205ef; 
+    border-radius: 10px;
+}
+.actorpic img {
+    width: 100%;
+    height: 18rem;
+    object-fit: cover; 
+    display: block;
+}
+.actorname  {
+    padding: 10px;
+    margin: 0;
+    font-size: 0.9rem;
+}
+.accpages{
+    margin-top: .5rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+    background-color: #3a0c63;
+    border-radius: 1rem;
+    padding: .2rem .5rem .2rem .5rem;
+}
+.accpage-number{
+    font-size: 1.3rem;
+    background: none;
+    border: none;
+}
+.accpage-number:hover{
+    background-color: #7440a2;
+    border-radius: auto;
+    text-shadow: #3a0c63;
+}
+.mainstuff{
+    display: none;
+}
+.actorsinfocontain{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.actorsinfo:hover{
+    background-color: #CBB7FF;
+    border-radius: .7rem;
+}
+.actorspage{
+    display: none;
+}
+/* search page */
+.searchpages {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
 
+.searchpages > div:nth-child(1) {
+    flex: 0 0 200px;
+    border: 1px solid black;
+    min-height: 400px;
+}
 
+.searchpages > div:nth-child(2) {
+    flex: 1;
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px;
+    align-content: flex-start;
+}
+
+.searchpages > div:nth-child(3) {
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.search-pagination-box {
+    width: 80%;
+    height: 50px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+}
+
+.searchpages ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+}
+
+.searchpages li {
+    padding: 10px 0;
+    cursor: pointer;
+}
+.scelement{
+    display: inline-flex;
+    align-items: center;
+    flex-direction: column;
+    padding: .7rem .7rem 0rem .7rem;
+}
+.scpic img {
+    height: 21rem;
+    width: 14rem;
+    border: #3a0c63
+}
+.scpic {
+    box-sizing: border-box;
+    align-items: center;
+    height:21rem;
+    width: 14rem;
+}
+.scname {
+    text-align: center;
+    max-width: 14rem;
+}
+.sccarrier{
+    margin: .7rem .7rem 0rem .7rem;
+}
+.searchpagination-number{
+    font-size: 1.3rem;
+    background: none;
+    border: none;
+}
+.searchthing{
+    display:none;
+}
