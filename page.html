@@ -106,7 +106,7 @@
     <!-- searchpage start here -->
     <div class="searchthing">
     <div class="searchpages">
-        <div> <ul><li>Movies</li><li>People</li></ul></div>
+        <div> <ul><li class="moviefilter">Movies</li><li class="peoplefilter">People</li><li class="tvfilter">Tv shows</li></ul></div>
         <div class="sccarrier"> 
             <div class="scelement">
                 <div class="scpic"><img src=""></div>
@@ -118,7 +118,35 @@
         </div>
     </div>
     </div>
-    
+    <!-- movie info starts here -->
+     <div class="movie-details" >
+    <div class="details-grid">
+        <div class="media-side">
+            <div class="detail-pic">
+                <img id="info-img" src="" alt="Movie Poster">
+            </div>
+            <div class="detail-trailer">
+                <p>Trailer</p>
+                </div>
+        </div>
+
+        <div class="info-side">
+            <div class="detail-description">
+                <h3>Description</h3>
+                <p id="info-desc"></p>
+            </div>
+            <div class="detail-actors">
+                <h3>Leading actors</h3>
+                <div id="info-actors" class="actors-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-footer">
+        <button id="add-fav">Add to Favourites</button>
+        <button id="mark-watched">Mark as Watched</button>
+    </div>
+</div>
 <script src="page.js"></script>
 </body>
 </html>
