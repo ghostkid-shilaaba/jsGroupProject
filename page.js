@@ -24,9 +24,12 @@ const searchinput=document.querySelectorAll(".search-input");
 const searchsend=document.querySelectorAll(".search-submit");
 const searchthing=document.querySelector(".searchthing");
 const searchpagination=document.querySelector(".searchpagination");
-const sccarrier=document.querySelector(".sccarrier")
-
-
+const sccarrier=document.querySelector(".sccarrier");
+const moviefilter=document.querySelector(".moviefilter");
+const peoplefilter=document.querySelector(".peoplefilter");
+const tvfilter=document.querySelector(".tvfilter");
+const moviedeats=document.querySelector(".movie-details");
+const mediaside=document.querySelector(".details-grid")
 
 
 
@@ -52,6 +55,7 @@ homebutton.forEach(el => {
     mainpage.style.display="none";
     actorspage.style.display="none";
     searchthing.style.display="none";
+    moviedeats.style.display="none";
 })
 });
 
@@ -64,6 +68,7 @@ actorsbutton.forEach(el=> {
     actorspage.style.display="block";
     mainstuff.style.display="block";
     searchthing.style.display="none";
+    moviedeats.style.display="none";
 })
 });
 
@@ -80,15 +85,42 @@ searchsend.forEach(el => {
     mainpage.style.display="none";
     actorspage.style.display="none";
     mainstuff.style.display="block";
+    moviedeats.style.display="none";
     searchthing.style.display="block";
     let a="";
     searchinput.forEach(el => {
         if (el.value)
             a=el.value;
     })
-    search(a,1);
+    const t = "";
+    search(a,1,t);
     })
 });
+ peoplefilter.addEventListener("click",function(){
+    let a="";
+    searchinput.forEach(el => {
+        if (el.value)
+            a=el.value;
+    })
+    search(a,1, "person");
+    })
+moviefilter.addEventListener("click",function(){
+    let a="";
+    searchinput.forEach(el => {
+        if (el.value)
+            a=el.value;
+    })
+    search(a,1, "movie");
+    })
+tvfilter.addEventListener("click",function(){
+    let a="";
+    searchinput.forEach(el => {
+        if (el.value)
+            a=el.value;
+    })
+    search(a,1, "tv");
+    })
+
 
 
 
@@ -133,8 +165,16 @@ const pageload = function(p){
             `<div class="mvelement">
                 <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${movie.poster_path}"></div>
                 <div class="mvname"><p>${movie.title}</p></div>
-            </div>`
+            </div>`;
             });
+            const actorsstuff=document.querySelectorAll(".mvelement");//mv element yllh ki bda hna
+            actorsstuff.forEach((el,index) => {//mvelement tableau donc khass nparcourih w foreach automatically l arg tani tikoun index
+                el.addEventListener("click",function(){
+                d.results[index].media_type = "movie";//hna khass ndefini hadi 7it f men popular movies api makijibch media type
+                movieinfo(d.results[index]);
+            })
+            });
+            
             const lastpage=d.total_pages;
         for(let i=currentpage-3;i<currentpage;++i){
             if (i<1){continue;}
@@ -192,43 +232,87 @@ const actorload = function(p) {
         .catch(error => console.error(error));
 }
 //search stuff
-const search=function(searchname ,pagenmber){
+const search=function(searchname ,pagenmber, type){
+    if (!type){type="multi"}
     let currentpage=pagenmber;
     sccarrier.innerHTML=" ";
     searchpagination.innerHTML=" ";
-        fetch(`https://api.themoviedb.org/3/search/multi?query=${searchname}&include_adult=true&language=en-US&page=${currentpage}`, options)
+        fetch(`https://api.themoviedb.org/3/search/${type}?query=${searchname}&include_adult=true&language=en-US&page=${currentpage}`, options)
         .then(res => res.json())
         .then(d => {
             d.results.forEach(el => {
                 sccarrier.innerHTML+=`
                     <div class="actorsinfo">
                         <div class="scelement">
-                <div class="scpic"><img src=${el.poster_path||el.profile_path}></div>
+                <div class="scpic"><img src=https://image.tmdb.org/t/p/w500${el.poster_path||el.profile_path||el.backdrop_path}></div>
                 <div class="scname"><p> ${el.title||el.name}</p></div>
             </div>
         </div>`
-                ;
             });
+            const actorsstuff=document.querySelectorAll(".actorsinfo");//mv element yllh ki bda hna
+            actorsstuff.forEach((el,index) => {//mvelement tableau donc khass nparcourih w foreach automatically l arg tani tikoun index
+                el.addEventListener("click",function(){
+                movieinfo(d.results[index]);
+            })
+            });
+            
+            
             const lastpage = d.total_pages;
             for(let i = currentpage - 3; i < currentpage; ++i) {
                 if (i < 1) { continue; }
                 searchpagination.innerHTML += `<button class="searchpagination-number">${i}</button>`;
             }
             for(let i = currentpage; i < currentpage + 4; ++i) {
-                if (i == lastpage) { continue; }
+                if (i > lastpage) { break; }
                 searchpagination.innerHTML += `<button class="searchpagination-number">${i}</button>`;
             }
             const pagebuttons = document.querySelectorAll(".searchpagination-number");
             pagebuttons.forEach(el => {
                 el.addEventListener("click", function() {
                     currentpage = Number(el.textContent);
-                    search(currentpage);
+                    search(searchname,currentpage, type);
                 });
             });
         })
         .catch(error => console.error(error));
 }
+//movie info
+const movieinfo=function(p){
+    mediaside.innerHTML="";
+    homepage.style.display="none";
+    mainpage.style.display="none";
+    actorspage.style.display="none";
+    mainstuff.style.display="block";
+    searchthing.style.display="none";
+    moviedeats.style.display="block";
+    fetch(`https://api.themoviedb.org/3/${p.media_type}/${p.id}?append_to_response=videos,credits&language=en-US`,options)//had fetch hia li kanjib biha l trailer
+    .then(res => res.json())
+    .then (d => {
+        const trailer = d.videos.results.find(v => v.type === "Trailer");
+        const trailerKey = trailer ? trailer.key : "";
+    mediaside.innerHTML+=`<div class="media-side">
+            <div class="detail-pic">
+                <img id="info-img" src=https://image.tmdb.org/t/p/w500${d.poster_path} alt="Movie Poster">
+            </div>
+            <div class="detail-trailer">
+                <a href=https://www.youtube.com/watch?v=${trailerKey}>Trailer</a>
+                </div>
+        </div>
 
+        <div class="info-side">
+            <div class="detail-description">
+                <h3>Description</h3>
+                <p id="info-desc">${d.overview}</p>
+            </div>
+            <div class="detail-actors">
+                <h3>Leading actors</h3>
+                <div id="info-actors" class="actors-list">${d.credits.cast.slice(0, 10).map(a => a.name).join(", ")}</div>
+            </div>
+        </div>
+    </div>`
+
+    })
+}
 
 
 
