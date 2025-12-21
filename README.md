@@ -1,4 +1,4 @@
-group 10
+groupe 10
 
 sujet: Cinetech
 
