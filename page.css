@@ -396,9 +396,7 @@ ol {
 }
 
 .searchpages > div:nth-child(3) {
-    flex: 0 0 100%;
-    display: flex;
-    justify-content: center;
+    text-align: center; /* center inline content */
     margin-top: 10px;
 }
 
@@ -419,8 +417,12 @@ ol {
 }
 
 .searchpages li {
-    padding: 10px 0;
+    padding: 10px 1rem;
     cursor: pointer;
+    border-radius: .5rem .5rem .5rem .5rem ;
+}
+.searchpages li:hover {
+    background-color: #9d68cc;
 }
 .scelement{
     display: inline-flex;
@@ -450,7 +452,109 @@ ol {
     font-size: 1.3rem;
     background: none;
     border: none;
+    display: inline-block; 
+    margin: 0 0.3rem; 
+    cursor: pointer;
+}
+.searchpagination-number:hover{
+    background-color: #7440a2;
+    border-radius: auto;
+    text-shadow: #3a0c63;
+}
+.searchpagination{
+    font-size: 1.3rem;
+    background-color: #3a0c63;
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
 }
 .searchthing{
     display:none;
+}
+
+.movie-details {
+    padding: 20px;
+    color: white;
+    background-color: #1a1a1a; 
+    min-height: 100vh;
+}
+
+.details-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr; 
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.media-side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detail-pic img {
+    width: 100%;
+    border: 2px solid #3a0c63;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.detail-trailer {
+    border: 1px solid #555;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+}
+
+
+.info-side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detail-description, .detail-actors {
+    border: 1px solid #555;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    min-height: 150px;
+}
+
+.detail-description h3, .detail-actors h3 {
+    margin-top: 0;
+    color: #9d4edd; 
+}
+.detail-footer {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 15px;
+    margin-top: 30px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.detail-footer button {
+    padding: 12px 24px;
+    border: 1px solid white;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.detail-footer button:hover {
+    background: white;
+    color: black;
+}
+.movie-details{
+    display: none;
 }
