@@ -430,6 +430,10 @@ ol {
     flex-direction: column;
     padding: .7rem .7rem 0rem .7rem;
 }
+.scelement:hover{
+    background-color: #CBB7FF;
+    border-radius: .7rem;
+}
 .scpic img {
     height: 21rem;
     width: 14rem;
@@ -557,4 +561,38 @@ ol {
 }
 .movie-details{
     display: none;
+}
+/*watched page*/
+.watched-page {
+    padding: 20px;
+    text-align: center;
+    display: none;
+}
+
+.page-title {
+    color: white;
+    margin-bottom: 30px;
+    font-family: sans-serif;
+    font-size: 2rem;
+}
+.watched-movies-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.clear-watched {
+    margin-top: 50px;
+    padding: 10px 25px;
+    background-color: #e50914; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clear-watched:hover {
+    background-color: #b20710;
 }
