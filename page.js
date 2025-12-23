@@ -320,7 +320,7 @@ const movieinfo=function(p){
                 watchedlisttab.push({
                     id: d.id,
                     title: d.title || d.name,
-                    poster: poster_path
+                    poster: d.poster_path
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));
                 alert("saved to your watchedlist");
@@ -331,14 +331,14 @@ const movieinfo=function(p){
         })
         markfav.addEventListener("click",function(){
             const favlist=localStorage.getItem("myfav");
-            let favlisttab =watchedlist? JSON.parse(favlist) : [];
+            let favlisttab =favlist? JSON.parse(favlist) : [];
             const watchedlist=localStorage.getItem("mywatched");
             let watchedlisttab =watchedlist? JSON.parse(watchedlist) : [];
             if(!watchedlisttab.some(m=>m.id==d.id)){
                 watchedlisttab.push({
                     id: d.id,
                     title: d.title || d.name,
-                    poster: poster_path
+                    poster: d.poster_path
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));//bach y koun f favs darori ykoun f watched
             }
@@ -346,9 +346,9 @@ const movieinfo=function(p){
                 favlisttab.push({
                     id: d.id,
                     title: d.title || d.name,
-                    poster: poster_path
+                    poster: d.poster_path
                 })
-                localStorage.setItem("mywatched", JSON.stringify(favlisttab));
+                localStorage.setItem("myfav", JSON.stringify(favlisttab));
                 alert("saved to your fav list");
             }
             else{
