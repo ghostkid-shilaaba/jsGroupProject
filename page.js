@@ -311,8 +311,8 @@ const movieinfo=function(p){
             </div>
         </div>
     </div>`
-        const markwatched=document.querySelector(".mark-watched");
-        const markfav=document.querySelector(".add-fav");
+        const markwatched=document.querySelector("#mark-watched");
+        const markfav=document.querySelector("#addfav");
         markwatched.addEventListener("click",function(){
             const watchedlist=localStorage.getItem("mywatched");
             let watchedlisttab =watchedlist? JSON.parse(watchedlist) : [];
