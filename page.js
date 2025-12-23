@@ -29,7 +29,9 @@ const moviefilter=document.querySelector(".moviefilter");
 const peoplefilter=document.querySelector(".peoplefilter");
 const tvfilter=document.querySelector(".tvfilter");
 const moviedeats=document.querySelector(".movie-details");
-const mediaside=document.querySelector(".details-grid")
+const mediaside=document.querySelector(".details-grid");
+
+
 
 
 
@@ -242,15 +244,14 @@ const search=function(searchname ,pagenmber, type){
         .then(d => {
             d.results.forEach(el => {
                 sccarrier.innerHTML+=`
-                    <div class="actorsinfo">
                         <div class="scelement">
                 <div class="scpic"><img src=https://image.tmdb.org/t/p/w500${el.poster_path||el.profile_path||el.backdrop_path}></div>
                 <div class="scname"><p> ${el.title||el.name}</p></div>
             </div>
-        </div>`
+        `
             });
-            const actorsstuff=document.querySelectorAll(".actorsinfo");//mv element yllh ki bda hna
-            actorsstuff.forEach((el,index) => {//mvelement tableau donc khass nparcourih w foreach automatically l arg tani tikoun index
+            const scstufff=document.querySelectorAll(".scelement");//sc element yllh ki bda hna
+            scstufff.forEach((el,index) => {//scelement tableau donc khass nparcourih w foreach automatically l arg tani tikoun index
                 el.addEventListener("click",function(){
                 movieinfo(d.results[index]);
             })
@@ -310,10 +311,54 @@ const movieinfo=function(p){
             </div>
         </div>
     </div>`
-
+        const markwatched=document.querySelector(".mark-watched");
+        const markfav=document.querySelector(".add-fav");
+        markwatched.addEventListener("click",function(){
+            const watchedlist=localStorage.getItem("mywatched");
+            let watchedlisttab =watchedlist? JSON.parse(watchedlist) : [];
+            if(!watchedlisttab.some(m=>m.id==d.id)){
+                watchedlisttab.push({
+                    id: d.id,
+                    title: d.title || d.name,
+                    poster: poster_path
+                })
+                localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));
+                alert("saved to your watchedlist");
+            }
+            else{
+                alert("this movie is already in your watched history");
+            }
+        })
+        markfav.addEventListener("click",function(){
+            const favlist=localStorage.getItem("myfav");
+            let favlisttab =watchedlist? JSON.parse(favlist) : [];
+            const watchedlist=localStorage.getItem("mywatched");
+            let watchedlisttab =watchedlist? JSON.parse(watchedlist) : [];
+            if(!watchedlisttab.some(m=>m.id==d.id)){
+                watchedlisttab.push({
+                    id: d.id,
+                    title: d.title || d.name,
+                    poster: poster_path
+                })
+                localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));//bach y koun f favs darori ykoun f watched
+            }
+            if(!favlisttab.some(m=>m.id==d.id)){
+                favlisttab.push({
+                    id: d.id,
+                    title: d.title || d.name,
+                    poster: poster_path
+                })
+                localStorage.setItem("mywatched", JSON.stringify(favlisttab));
+                alert("saved to your fav list");
+            }
+            else{
+                alert("this movie is already in your fav history");
+            }
+        })
     })
-}
+    .catch(error => console.error(error));
 
+}
 
 
 
