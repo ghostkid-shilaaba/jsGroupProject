@@ -30,10 +30,18 @@ const peoplefilter=document.querySelector(".peoplefilter");
 const tvfilter=document.querySelector(".tvfilter");
 const moviedeats=document.querySelector(".movie-details");
 const mediaside=document.querySelector(".details-grid");
-const watchedbutton=document.querySelectorAll(".watched");
+const watchedbutton=document.querySelectorAll(".watched");//watched page stuff
 const watchedpage=document.querySelector(".watched-page");
 const watchedtitle=document.querySelector(".watched-title");
 const watchedmoviescontainer=document.querySelector(".watched-movies-container");
+const favbutton=document.querySelectorAll(".favbutton");//fav page stuff
+const favpage=document.querySelector(".fav-page");
+const favtitle=document.querySelector(".fav-title");
+const favmoviescontainer=document.querySelector(".fav-movies-container");
+
+
+
+
 
 
 
@@ -61,6 +69,7 @@ homebutton.forEach(el => {
     searchthing.style.display="none";
     moviedeats.style.display="none";
     watchedpage.style.display="none";
+    favpage.style.display="none";
 })
 });
 
@@ -75,6 +84,7 @@ actorsbutton.forEach(el=> {
     searchthing.style.display="none";
     moviedeats.style.display="none";
     watchedpage.style.display="none";
+    favpage.style.display="none";
 })
 });
 
@@ -94,6 +104,7 @@ searchsend.forEach(el => {
     moviedeats.style.display="none";
     searchthing.style.display="block";
     watchedpage.style.display="none";
+    favpage.style.display="none";
     let a="";
     searchinput.forEach(el => {
         if (el.value)
@@ -137,11 +148,24 @@ watchedbutton.forEach(el => {
     moviedeats.style.display="none";
     searchthing.style.display="none";
     watchedpage.style.display="block";
+    favpage.style.display="none";
     showmoviepage();
     })
 });
 
-
+favbutton.forEach(el => {
+    el.addEventListener("click",function(){
+    homepage.style.display="none";
+    mainpage.style.display="none";
+    actorspage.style.display="none";
+    mainstuff.style.display="block";
+    moviedeats.style.display="none";
+    searchthing.style.display="none";
+    watchedpage.style.display="none";
+    favpage.style.display="block";
+    favmoviepage();
+    })
+});
 
 
 
@@ -304,6 +328,8 @@ const movieinfo=function(p){
     mainstuff.style.display="block";
     searchthing.style.display="none";
     moviedeats.style.display="block";
+    watchedpage.style.display="none";
+    favpage.style.display="none";
     fetch(`https://api.themoviedb.org/3/${p.media_type}/${p.id}?append_to_response=videos,credits&language=en-US`,options)//had fetch hia li kanjib biha l trailer
     .then(res => res.json())
     .then (d => {
@@ -385,7 +411,7 @@ const showmoviepage=function(){
     watchedmoviescontainer.innerHTML = "";
     const storage=localStorage.getItem("mywatched");
     if (!storage){
-        watchedtitle.innerHTML="no movies watched yet";
+        watchedtitle.innerHTML="no shows watched yet";
     }
     else{
         JSON.parse(storage).forEach(el => {
@@ -402,6 +428,27 @@ const showmoviepage=function(){
     }
 }
 //fav page
+const favmoviepage=function(){
+    favmoviescontainer.innerHTML = "";
+    const storage=localStorage.getItem("myfav");
+    if (!storage){
+        favtitle.innerHTML="no shows liked yet";
+    }
+    else{
+        JSON.parse(storage).forEach(el => {
+            fetch(`https://api.themoviedb.org/3/${el.type}/${el.id}?language=en-US`, options)
+            .then(res=>res.json())
+            .then (d=>
+            favmoviescontainer.innerHTML+=`<div class="mvelement">
+                <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${d.poster_path}"></div>
+                <div class="mvname"><p>${d.title || d.name}</p></div>
+            </div>`
+            )
+            .catch(error => console.error(error));
+        });
+    }
+}
+
 
 
 
