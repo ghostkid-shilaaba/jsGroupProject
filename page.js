@@ -30,8 +30,10 @@ const peoplefilter=document.querySelector(".peoplefilter");
 const tvfilter=document.querySelector(".tvfilter");
 const moviedeats=document.querySelector(".movie-details");
 const mediaside=document.querySelector(".details-grid");
-
-
+const watchedbutton=document.querySelectorAll(".watched");
+const watchedpage=document.querySelector(".watched-page");
+const watchedtitle=document.querySelector(".watched-title");
+const watchedmoviescontainer=document.querySelector(".watched-movies-container");
 
 
 
@@ -58,6 +60,7 @@ homebutton.forEach(el => {
     actorspage.style.display="none";
     searchthing.style.display="none";
     moviedeats.style.display="none";
+    watchedpage.style.display="none";
 })
 });
 
@@ -71,6 +74,7 @@ actorsbutton.forEach(el=> {
     mainstuff.style.display="block";
     searchthing.style.display="none";
     moviedeats.style.display="none";
+    watchedpage.style.display="none";
 })
 });
 
@@ -89,6 +93,7 @@ searchsend.forEach(el => {
     mainstuff.style.display="block";
     moviedeats.style.display="none";
     searchthing.style.display="block";
+    watchedpage.style.display="none";
     let a="";
     searchinput.forEach(el => {
         if (el.value)
@@ -122,6 +127,19 @@ tvfilter.addEventListener("click",function(){
     })
     search(a,1, "tv");
     })
+//watched page
+watchedbutton.forEach(el => {
+    el.addEventListener("click",function(){
+    homepage.style.display="none";
+    mainpage.style.display="none";
+    actorspage.style.display="none";
+    mainstuff.style.display="block";
+    moviedeats.style.display="none";
+    searchthing.style.display="none";
+    watchedpage.style.display="block";
+    showmoviepage();
+    })
+});
 
 
 
@@ -316,11 +334,12 @@ const movieinfo=function(p){
         markwatched.addEventListener("click",function(){
             const watchedlist=localStorage.getItem("mywatched");
             let watchedlisttab =watchedlist? JSON.parse(watchedlist) : [];
-            if(!watchedlisttab.some(m=>m.id==d.id)){
+            if(!watchedlisttab.some(m=>m.id==p.id)){
                 watchedlisttab.push({
-                    id: d.id,
-                    title: d.title || d.name,
-                    poster: d.poster_path
+                    id: p.id,
+                    type: p.media_type 
+                   /* title: d.title || d.name,
+                    poster: d.poster_path*/
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));
                 alert("saved to your watchedlist");
@@ -334,19 +353,21 @@ const movieinfo=function(p){
             let favlisttab =favlist? JSON.parse(favlist) : [];
             const watchedlist=localStorage.getItem("mywatched");
             let watchedlisttab =watchedlist? JSON.parse(watchedlist) : [];
-            if(!watchedlisttab.some(m=>m.id==d.id)){
+            if(!watchedlisttab.some(m=>m.id==p.id)){
                 watchedlisttab.push({
-                    id: d.id,
-                    title: d.title || d.name,
-                    poster: d.poster_path
+                    id: p.id,
+                    type: p.media_type 
+                   /* title: d.title || d.name,
+                    poster: d.poster_path*/
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));//bach y koun f favs darori ykoun f watched
             }
-            if(!favlisttab.some(m=>m.id==d.id)){
+            if(!favlisttab.some(m=>m.id==p.id)){
                 favlisttab.push({
-                    id: d.id,
-                    title: d.title || d.name,
-                    poster: d.poster_path
+                    id: p.id,
+                    type: p.media_type 
+                   /* title: d.title || d.name,
+                    poster: d.poster_path*/
                 })
                 localStorage.setItem("myfav", JSON.stringify(favlisttab));
                 alert("saved to your fav list");
@@ -359,6 +380,29 @@ const movieinfo=function(p){
     .catch(error => console.error(error));
 
 }
+//moviepagefunc
+const showmoviepage=function(){
+    watchedmoviescontainer.innerHTML = "";
+    const storage=localStorage.getItem("mywatched");
+    if (!storage){
+        watchedtitle.innerHTML="no movies watched yet";
+    }
+    else{
+        JSON.parse(storage).forEach(el => {
+            fetch(`https://api.themoviedb.org/3/${el.type}/${el.id}?language=en-US`, options)
+            .then(res=>res.json())
+            .then (d=>
+            watchedmoviescontainer.innerHTML+=`<div class="mvelement">
+                <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${d.poster_path}"></div>
+                <div class="mvname"><p>${d.title || d.name}</p></div>
+            </div>`
+            )
+            .catch(error => console.error(error));
+        });
+    }
+}
+//fav page
+
 
 
 
