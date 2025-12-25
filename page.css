@@ -623,3 +623,22 @@ ol {
 .clear-fav:hover {
     background-color: #b20710;
 }
+.delete-x {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    z-index: 10; 
+    font-weight: bold;
+}
+
+.delete-x:hover {
+    background: darkred;
+    transform: scale(1.1);
+}
