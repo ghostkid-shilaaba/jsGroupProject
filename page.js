@@ -38,6 +38,8 @@ const favbutton=document.querySelectorAll(".favbutton");//fav page stuff
 const favpage=document.querySelector(".fav-page");
 const favtitle=document.querySelector(".fav-title");
 const favmoviescontainer=document.querySelector(".fav-movies-container");
+const clearfav = document.querySelector(".clear-fav");//clear all fav
+const clearwatched= document.querySelector(".clear-watched"); //clear all watched
 
 
 
@@ -167,7 +169,16 @@ favbutton.forEach(el => {
     })
 });
 
-
+//button to clear all mwatched movies
+clearwatched.addEventListener("click",function(){
+    localStorage.removeItem("mywatched");
+    showmoviepage();
+})
+//button to clear all fav movies
+clearfav.addEventListener("click",function(){
+    localStorage.removeItem("myfav");
+    favmoviepage();
+})
 
 
 
@@ -412,6 +423,7 @@ const showmoviepage=function(){
     const storage=localStorage.getItem("mywatched");
     if (!storage){
         watchedtitle.innerHTML="no shows watched yet";
+        watchedmoviescontainer.innerHTML = "";//to make it seem like the uhh el are deleted in real time
     }
     else{
         JSON.parse(storage).forEach(el => {
@@ -419,6 +431,7 @@ const showmoviepage=function(){
             .then(res=>res.json())
             .then (d=>
             watchedmoviescontainer.innerHTML+=`<div class="mvelement">
+                <button class="delete-fav-btn">X</button>
                 <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${d.poster_path}"></div>
                 <div class="mvname"><p>${d.title || d.name}</p></div>
             </div>`
@@ -433,17 +446,27 @@ const favmoviepage=function(){
     const storage=localStorage.getItem("myfav");
     if (!storage){
         favtitle.innerHTML="no shows liked yet";
+        favmoviescontainer.innerHTML = "";
     }
     else{
         JSON.parse(storage).forEach(el => {
             fetch(`https://api.themoviedb.org/3/${el.type}/${el.id}?language=en-US`, options)
             .then(res=>res.json())
-            .then (d=>
-            favmoviescontainer.innerHTML+=`<div class="mvelement">
+            .then (d=>{
+            favmoviescontainer.innerHTML+=`<div class="mvelement mv-${el.id}">
+                <button class="delete-fav-btn btn-${el.id}">X</button>
                 <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${d.poster_path}"></div>
                 <div class="mvname"><p>${d.title || d.name}</p></div>
-            </div>`
-            )
+            </div>` 
+           /* const del =document.querySelector(`.btn-${el.id}`);
+           del.addEventListener("click", function(){
+                document.querySelector(`.mv-${el.id}`).remove();
+                let currentFavs = JSON.parse(localStorage.getItem("myfav"));
+                currentFavs = currentFavs.filter(m => m.id != el.id);
+                localStorage.setItem("myfav", JSON.stringify(currentFavs));
+                favmoviepage();
+           })*/
+        })
             .catch(error => console.error(error));
         });
     }
