@@ -40,8 +40,9 @@ const favtitle=document.querySelector(".fav-title");
 const favmoviescontainer=document.querySelector(".fav-movies-container");
 const clearfav = document.querySelector(".clear-fav");//clear all fav
 const clearwatched= document.querySelector(".clear-watched"); //clear all watched
-
-
+const sortrating =document.querySelector(".sort-rating");
+const sortdate =document.querySelector(".sort-date");
+const sortalphabet =document.querySelector(".sort-alphabet");
 
 
 
@@ -288,29 +289,15 @@ const actorload = function(p) {
 }
 //search stuff
 const search=function(searchname ,pagenmber, type){
+    let currentResults = [];
     if (!type){type="multi"}
     let currentpage=pagenmber;
-    sccarrier.innerHTML=" ";
     searchpagination.innerHTML=" ";
         fetch(`https://api.themoviedb.org/3/search/${type}?query=${searchname}&include_adult=true&language=en-US&page=${currentpage}`, options)
         .then(res => res.json())
         .then(d => {
-            d.results.forEach(el => {
-                sccarrier.innerHTML+=`
-                        <div class="scelement">
-                <div class="scpic"><img src=https://image.tmdb.org/t/p/w500${el.poster_path||el.profile_path||el.backdrop_path}></div>
-                <div class="scname"><p> ${el.title||el.name}</p></div>
-            </div>
-        `
-            });
-            const scstufff=document.querySelectorAll(".scelement");//sc element yllh ki bda hna
-            scstufff.forEach((el,index) => {//scelement tableau donc khass nparcourih w foreach automatically l arg tani tikoun index
-                el.addEventListener("click",function(){
-                movieinfo(d.results[index]);
-            })
-            });
-            
-            
+            currentResults=d.results;
+            display(currentResults);
             const lastpage = d.total_pages;
             for(let i = currentpage - 3; i < currentpage; ++i) {
                 if (i < 1) { continue; }
@@ -327,7 +314,27 @@ const search=function(searchname ,pagenmber, type){
                     search(searchname,currentpage, type);
                 });
             });
+            sortrating.addEventListener("click", function(){//sort  by ratin
+            const sorted = [...currentResults].sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0));///3dots creates a copy to not messup the og data
+                display(sorted);
         })
+        sortdate.addEventListener("click", function(){//sort by date
+            const sorted = [...currentResults].sort((a, b) => {
+            const dateA = new Date(a.release_date || a.first_air_date || 0);
+            const dateB = new Date(b.release_date || b.first_air_date || 0);
+            return dateB - dateA;
+                });
+            display(sorted);
+        })
+        sortalphabet.addEventListener("click", function(){
+            const sorted = [...currentResults].sort((a, b) => {
+            const nameA = (a.title || a.name || "").toLowerCase();
+            const nameB = (b.title || b.name || "").toLowerCase();
+            return nameA.localeCompare(nameB);
+                });
+            display(sorted)
+            })
+    })
         .catch(error => console.error(error));
 }
 //movie info
@@ -341,7 +348,8 @@ const movieinfo=function(p){
     moviedeats.style.display="block";
     watchedpage.style.display="none";
     favpage.style.display="none";
-    fetch(`https://api.themoviedb.org/3/${p.media_type}/${p.id}?append_to_response=videos,credits&language=en-US`,options)//had fetch hia li kanjib biha l trailer
+    const type = p.media_type || (p.title ? "movie" : "tv");
+    fetch(`https://api.themoviedb.org/3/${type}/${p.id}?append_to_response=videos,credits&language=en-US`,options)//had fetch hia li kanjib biha l trailer
     .then(res => res.json())
     .then (d => {
         const trailer = d.videos.results.find(v => v.type === "Trailer");
@@ -364,6 +372,13 @@ const movieinfo=function(p){
                 <h3>Leading actors</h3>
                 <div id="info-actors" class="actors-list">${d.credits.cast.slice(0, 10).map(a => a.name).join(", ")}</div>
             </div>
+            <h3>Rating</h3>
+                <p>⭐ ${d.vote_average.toFixed(1)}/10 (${d.vote_count} votes)</p>
+            </div>
+            <div class="detail-release">
+                <h3>Release Date</h3>
+                <p>${d.release_date || d.first_air_date || "Unknown"}</p>
+            </div>
         </div>
     </div>`
         const markwatched=document.querySelector("#mark-watched");
@@ -375,8 +390,6 @@ const movieinfo=function(p){
                 watchedlisttab.push({
                     id: p.id,
                     type: p.media_type 
-                   /* title: d.title || d.name,
-                    poster: d.poster_path*/
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));
                 alert("saved to your watchedlist");
@@ -394,8 +407,6 @@ const movieinfo=function(p){
                 watchedlisttab.push({
                     id: p.id,
                     type: p.media_type 
-                   /* title: d.title || d.name,
-                    poster: d.poster_path*/
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));//bach y koun f favs darori ykoun f watched
             }
@@ -403,8 +414,6 @@ const movieinfo=function(p){
                 favlisttab.push({
                     id: p.id,
                     type: p.media_type 
-                   /* title: d.title || d.name,
-                    poster: d.poster_path*/
                 })
                 localStorage.setItem("myfav", JSON.stringify(favlisttab));
                 alert("saved to your fav list");
@@ -426,16 +435,32 @@ const showmoviepage=function(){
         watchedmoviescontainer.innerHTML = "";//to make it seem like the uhh el are deleted in real time
     }
     else{
+        let moviecount=0;
         JSON.parse(storage).forEach(el => {
             fetch(`https://api.themoviedb.org/3/${el.type}/${el.id}?language=en-US`, options)
             .then(res=>res.json())
-            .then (d=>
+            .then (d=>{
             watchedmoviescontainer.innerHTML+=`<div class="mvelement">
-                <button class="delete-fav-btn">X</button>
+                <button class="delete-watch-btn" data-id="${el.id}">X</button>
                 <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${d.poster_path}"></div>
                 <div class="mvname"><p>${d.title || d.name}</p></div>
             </div>`
-            )
+            moviecount++;
+            if(moviecount==JSON.parse(localStorage.getItem("mywatched")).length){
+           const dels =document.querySelectorAll(`.delete-watch-btn`);
+           dels.forEach(del => {
+             del.addEventListener("click", function(){
+                const idToDel = this.getAttribute("data-id");
+                let currentwatched = JSON.parse(localStorage.getItem("mywatched"));
+                currentwatched = currentwatched.filter(m => m.id != idToDel);
+                localStorage.setItem("mywatched", JSON.stringify(currentwatched));
+                showmoviepage()
+           });
+          
+           })
+        }
+
+        })
             .catch(error => console.error(error));
         });
     }
@@ -449,23 +474,32 @@ const favmoviepage=function(){
         favmoviescontainer.innerHTML = "";
     }
     else{
+         let moviecount=0;
         JSON.parse(storage).forEach(el => {
             fetch(`https://api.themoviedb.org/3/${el.type}/${el.id}?language=en-US`, options)
             .then(res=>res.json())
             .then (d=>{
+
             favmoviescontainer.innerHTML+=`<div class="mvelement mv-${el.id}">
-                <button class="delete-fav-btn btn-${el.id}">X</button>
+                <button class="delete-fav-btn" data-id="${el.id}">X</button>
                 <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${d.poster_path}"></div>
                 <div class="mvname"><p>${d.title || d.name}</p></div>
             </div>` 
-           /* const del =document.querySelector(`.btn-${el.id}`);
-           del.addEventListener("click", function(){
-                document.querySelector(`.mv-${el.id}`).remove();
+            moviecount++;
+            if(moviecount==JSON.parse(localStorage.getItem("myfav")).length){
+           const dels =document.querySelectorAll(`.delete-fav-btn`);
+           dels.forEach(del => {
+             del.addEventListener("click", function(){
+                const idToDel = this.getAttribute("data-id");
                 let currentFavs = JSON.parse(localStorage.getItem("myfav"));
-                currentFavs = currentFavs.filter(m => m.id != el.id);
+                currentFavs = currentFavs.filter(m => m.id != idToDel);
                 localStorage.setItem("myfav", JSON.stringify(currentFavs));
-                favmoviepage();
-           })*/
+                favmoviepage()
+           });
+          
+           })
+        }
+              
         })
             .catch(error => console.error(error));
         });
@@ -487,5 +521,24 @@ fetch("https://api.themoviedb.org/3/genre/movie/list?language=en",options)//genr
         })
     .catch(error => console.error(error));
 
+const display = function(moviearr) { //bach man3adch bzzf ki dir nfs haja 4 mrrat hhhh
+    sccarrier.innerHTML = ""; 
 
+    moviearr.forEach(el => {
+        sccarrier.innerHTML += `
+            <div class="scelement">
+                <div class="scpic"><img src="https://image.tmdb.org/t/p/w500${el.poster_path || el.profile_path || el.backdrop_path}"></div>
+                <div class="scname"><p>${el.title || el.name}</p></div>
+            </div>`;
+    });
+
+    // 2. Add Listeners to what we just built
+    const scstufff = document.querySelectorAll(".scelement");
+    scstufff.forEach((el, index) => {
+        el.addEventListener("click", function() {
+            // It uses the specific array passed into the function!
+            movieinfo(moviearr[index]); 
+        });
+    });
+};
 
