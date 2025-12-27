@@ -378,7 +378,6 @@ ol {
     padding: 10px;
     box-sizing: border-box;
 }
-
 .searchpages > div:nth-child(1) {
     flex: 0 0 200px;
     border: 1px solid black;
@@ -396,7 +395,7 @@ ol {
 }
 
 .searchpages > div:nth-child(3) {
-    text-align: center; /* center inline content */
+    text-align: center; 
     margin-top: 10px;
 }
 
@@ -558,6 +557,40 @@ ol {
 .detail-footer button:hover {
     background: white;
     color: black;
+}
+.detail-rating, .detail-release {
+    border: 1px solid #555;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+.detail-rating h3, .detail-release h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #9d4edd;
+    font-size: 1.2rem;
+}
+
+.detail-rating p, .detail-release p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #EDEDED;
+}
+
+.detail-rating p {
+    font-weight: bold;
+    color: #7440a2;
+}
+
+.info-side {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px;
+}
+
+.detail-description, .detail-actors {
+    grid-column: 1 / -1; 
 }
 .movie-details{
     display: none;
