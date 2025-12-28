@@ -254,6 +254,61 @@ ol {
     border-radius: .3rem;
     cursor: pointer;
 }
+.sidebar-container {
+    width: 220px;
+    padding: 20px;
+    background-color: transparent; /* Or match your site's dark bg */
+    color: white;
+}
+
+.sidebar-title {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.sort-list {
+    list-style: none;
+    padding: 0;
+}
+
+.top-filter-bar {
+    display: flex;
+    align-items: center; 
+    gap: 20px;
+    padding: 15px 20px;
+    background-color: #000; 
+    color: white;
+}
+
+.filter-label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.sort-list {
+    display: flex; 
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 10px;
+}
+
+.sort-item {
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 12px;
+    transition: 0.3s ease;
+    white-space: nowrap;
+}
+
+
+.sort-item:hover {
+    background-color: #9b6dca; 
+    color: white;
+}
 .movies{
     margin: .7rem .7rem 0rem .7rem;
 }
@@ -674,4 +729,26 @@ ol {
 .delete-x:hover {
     background: darkred;
     transform: scale(1.1);
+}
+/*char part */
+
+.stats-container {
+    margin: 40px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05); 
+    border-radius: 15px;
+    max-width: 800px; 
+    display: none;
+}
+
+.chart-wrapper {
+    position: relative;
+    height: 400px; 
+    width: 100%;
+}
+
+@media (max-width: 600px) {
+    .chart-wrapper {
+        height: 500px;
+    }
 }
