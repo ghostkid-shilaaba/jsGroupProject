@@ -40,10 +40,14 @@ const favtitle=document.querySelector(".fav-title");
 const favmoviescontainer=document.querySelector(".fav-movies-container");
 const clearfav = document.querySelector(".clear-fav");//clear all fav
 const clearwatched= document.querySelector(".clear-watched"); //clear all watched
-const sortrating =document.querySelector(".sort-rating");
+const sortrating =document.querySelector(".sort-rating");//search sort
 const sortdate =document.querySelector(".sort-date");
 const sortalphabet =document.querySelector(".sort-alphabet");
-
+const sidebarcontainer = document.querySelector(".sidebar-container");
+const sortitems = document.querySelectorAll(".sort-item");
+const statscontainer=document.querySelector('.stats-container');//kpi stuff
+const kpipage=document.querySelectorAll('.kpi');
+let myChart = null;
 
 
 
@@ -73,6 +77,8 @@ homebutton.forEach(el => {
     moviedeats.style.display="none";
     watchedpage.style.display="none";
     favpage.style.display="none";
+    sidebarcontainer.style.display="none";
+    statscontainer.style.display="none";
 })
 });
 
@@ -88,6 +94,7 @@ actorsbutton.forEach(el=> {
     moviedeats.style.display="none";
     watchedpage.style.display="none";
     favpage.style.display="none";
+    statscontainer.style.display="none";
 })
 });
 
@@ -108,6 +115,7 @@ searchsend.forEach(el => {
     searchthing.style.display="block";
     watchedpage.style.display="none";
     favpage.style.display="none";
+    statscontainer.style.display="none";
     let a="";
     searchinput.forEach(el => {
         if (el.value)
@@ -152,6 +160,7 @@ watchedbutton.forEach(el => {
     searchthing.style.display="none";
     watchedpage.style.display="block";
     favpage.style.display="none";
+    statscontainer.style.display="none";
     showmoviepage();
     })
 });
@@ -166,6 +175,7 @@ favbutton.forEach(el => {
     searchthing.style.display="none";
     watchedpage.style.display="none";
     favpage.style.display="block";
+    statscontainer.style.display="none";
     favmoviepage();
     })
 });
@@ -180,7 +190,28 @@ clearfav.addEventListener("click",function(){
     localStorage.removeItem("myfav");
     favmoviepage();
 })
-
+//sorting buttons for every genre
+sortitems.forEach(el => {
+    el.addEventListener("click", function() {
+        const sort = this.getAttribute("data-sort");
+        loadgenres(genre.value, sort, 1);
+    });
+});
+//kpi page
+kpipage.forEach(el=>{
+    el.addEventListener("click", function(){
+    homepage.style.display="none";
+    mainpage.style.display="none";
+    actorspage.style.display="none";
+    mainstuff.style.display="block";
+    moviedeats.style.display="none";
+    searchthing.style.display="none";
+    watchedpage.style.display="none";
+    favpage.style.display="none";
+    statscontainer.style.display="block";
+    kpithing();
+    })
+})
 
 
 
@@ -348,6 +379,7 @@ const movieinfo=function(p){
     moviedeats.style.display="block";
     watchedpage.style.display="none";
     favpage.style.display="none";
+    statscontainer.style.display="none";
     const type = p.media_type || (p.title ? "movie" : "tv");
     fetch(`https://api.themoviedb.org/3/${type}/${p.id}?append_to_response=videos,credits&language=en-US`,options)//had fetch hia li kanjib biha l trailer
     .then(res => res.json())
@@ -389,7 +421,8 @@ const movieinfo=function(p){
             if(!watchedlisttab.some(m=>m.id==p.id)){
                 watchedlisttab.push({
                     id: p.id,
-                    type: p.media_type 
+                    type: p.media_type,
+                    genres: d.genres.map(g => g.name)
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));
                 alert("saved to your watchedlist");
@@ -406,14 +439,16 @@ const movieinfo=function(p){
             if(!watchedlisttab.some(m=>m.id==p.id)){
                 watchedlisttab.push({
                     id: p.id,
-                    type: p.media_type 
+                    type: p.media_type,
+                    genres: d.genres.map(g => g.name)
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));//bach y koun f favs darori ykoun f watched
             }
             if(!favlisttab.some(m=>m.id==p.id)){
                 favlisttab.push({
                     id: p.id,
-                    type: p.media_type 
+                    type: p.media_type,
+                    genres: d.genres.map(g => g.name)
                 })
                 localStorage.setItem("myfav", JSON.stringify(favlisttab));
                 alert("saved to your fav list");
@@ -516,10 +551,13 @@ fetch("https://api.themoviedb.org/3/genre/movie/list?language=en",options)//genr
     .then(data => {
          data.genres.forEach(el => {
              genre.innerHTML+=
-                 `<option>${el.name} </option>`
+                `<option value="${el.id}">${el.name}</option>`
             });
         })
     .catch(error => console.error(error));
+genre.addEventListener("change", function(){
+        loadgenres(genre.value);
+    })
 
 const display = function(moviearr) { //bach man3adch bzzf ki dir nfs haja 4 mrrat hhhh
     sccarrier.innerHTML = ""; 
@@ -541,4 +579,97 @@ const display = function(moviearr) { //bach man3adch bzzf ki dir nfs haja 4 mrra
         });
     });
 };
+const loadgenres =function(currentgenre, sort = "popularity.desc", page = 1){//func cuz i wan confused oterwise hhhhh
+    sidebarcontainer.style.display="block";
+    homepage.style.display = "block";
+    mainstuff.style.display = "block";
+    mainpage.style.display = "none";
+    actorspage.style.display = "none";
+    searchthing.style.display = "none";
+    moviedeats.style.display = "none";
+    watchedpage.style.display = "none";
+    favpage.style.display = "none";
+    movies.innerHTML = "";
+    pages.innerHTML = "";
+    
+    fetch(`https://api.themoviedb.org/3/discover/movie?with_genres=${currentgenre}&sort_by=${sort}&language=en-US&page=${page}`, options)//api waits for an id so i cant use .textContent
+    .then(response => response.json())
+    .then(d => {
+        d.results.forEach(movie => {
+            movies.innerHTML += `
+            <div class="mvelement">
+                <div class="mvpic"><img src="https://image.tmdb.org/t/p/w500${movie.poster_path}"></div>
+                <div class="mvname"><p>${movie.title}</p></div>
+            </div>`;
+        });
+        
+        const actorsstuff = document.querySelectorAll(".mvelement");
+        actorsstuff.forEach((el, index) => {
+            el.addEventListener("click", function(){
+                d.results[index].media_type = "movie";
+                movieinfo(d.results[index]);
+            });
+        });
+        const lastpage = d.total_pages;
+        for(let i = page - 3; i < page; i++){
+            if (i < 1) continue;
+            pages.innerHTML += `<button class="page-number">${i}</button>`;
+        }
+        for(let i = page; i < page + 4; i++){
+            if (i == lastpage) continue;
+            pages.innerHTML += `<button class="page-number">${i}</button>`;
+        }
+        
+        const pagebuttons = document.querySelectorAll(".page-number");
+        pagebuttons.forEach(el => {
+            el.addEventListener("click", function(){
+                loadgenres(currentgenre, sort, Number(el.textContent));
+            });
+        });
+    });
+}
+//chart part
+const kpithing = function(){
+    const favlist = JSON.parse(localStorage.getItem("myfav")) || [];
+    if (favlist.length==0){return;}
+    count={};
+    favlist.forEach(el => {
+        el.genres.forEach(g=>{
+            count[g]=(count[g]||0) +1;//so we could in the end see how many times is a genre present
+        })
+    });
+    const genres = Object.keys(count);
+    const genresocc = Object.values(count);
+    const colors = [
+        '#8205ef', '#9b6dca', '#42146a', '#7440a2', '#bf73d6', 
+        '#3a0c63', '#CBB7FF', '#5a189a', '#e0aaff', '#7b2cbf',
+        '#240046', '#10002b', '#540d6e', '#ee4266', '#ffd23f',
+        '#3bceac', '#0ead69', '#0096c7', '#00b4d8'
+    ];
+    const doughnut = document.querySelector('#genreChart').getContext('2d');
 
+    if (myChart) { myChart.destroy(); }
+
+   myChart = new Chart(doughnut, {
+    type: 'doughnut',
+    data: {
+        labels: genres,
+        datasets: [{
+            data: genresocc,
+            backgroundColor: colors,
+            hoverOffset: 15,
+            borderWidth: 1,
+            borderColor: '#000'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'right', 
+                labels: { color: 'white' }
+            }
+        }
+    }
+});
+    }
