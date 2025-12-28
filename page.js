@@ -589,6 +589,7 @@ const loadgenres =function(currentgenre, sort = "popularity.desc", page = 1){//f
     moviedeats.style.display = "none";
     watchedpage.style.display = "none";
     favpage.style.display = "none";
+    statscontainer.style.display="none";
     movies.innerHTML = "";
     pages.innerHTML = "";
     
