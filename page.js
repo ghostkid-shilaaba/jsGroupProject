@@ -52,6 +52,7 @@ const addmoviestuff= document.querySelector("#add-movie-modal");//add movie stuf
 const addbutton = document.querySelector(".userinfo"); 
 const closebutton = document.querySelector(".close-btn");
 const form = document.querySelector("#custom-movie-form");
+const customgenreselect=document.querySelector("#custom-genre");
 
 
 
@@ -247,6 +248,7 @@ addbutton.addEventListener("click", function(){
 });
 closebutton.addEventListener("click", function(){
     addmoviestuff.style.display = "none";
+    homepage.style.display="block";
     pageload(1);
 });
 form.addEventListener("submit", function(){
@@ -656,7 +658,9 @@ fetch("https://api.themoviedb.org/3/genre/movie/list?language=en",options)//genr
     .then(data => {
          data.genres.forEach(el => {
              genre.innerHTML+=
-                `<option value="${el.id}">${el.name}</option>`
+                `<option value="${el.id}">${el.name}</option>`;
+            customgenreselect.innerHTML += 
+                `<option value="${el.name}">${el.name}</option>`;
             });
         })
     .catch(error => console.error(error));
@@ -782,16 +786,17 @@ const kpithing = function(){
 //create movie
 const newmovies=localStorage.getItem("addedmovies");
 const saveNewMovie = function() {
-    let custmovies = JSON.parse(localStorage.getItem("addedmovies")) || [];
-    const id = document.querySelector("#custom-id").value.trim();
 
-    custmovies = custmovies.filter(m => m.id != id);
+    let custmovies = JSON.parse(localStorage.getItem("addedmovies")) || [];
     
     const newMovie = {
-        id: document.querySelector("#custom-id").value.trim(),
+        id: Date.now().toString(),
         title: document.querySelector("#custom-name").value.trim(),
         overview: document.querySelector("#custom-desc").value,
         genres: [document.querySelector("#custom-genre").value], 
+        release_date: document.querySelector("#custom-date").value,
+        vote_average: document.querySelector("#custom-rating").value || 0, 
+        vote_count: document.querySelector("#custom-votes").value || 0,
         poster_path: null, 
         isCustom: true
     };
@@ -826,12 +831,67 @@ const showMyCustomInfo = function(id) {
     statscontainer.style.display="none";
     moviedeats.style.display="block";
     mediaside.innerHTML = `
-        <div class="info-side">
-            <h1>${movie.title}</h1>
-            <p>${movie.overview}</p>
-            <h3>Genres: ${movie.genres.join(", ")}</h3>
+        <div class="media-side">
+        <div class="detail-pic">
+            <img id="info-img" src="${movie.poster_path || 'https://via.placeholder.com/500x750?text=No+Poster+Available'}" alt="Movie Poster">
         </div>
+        <div class="detail-trailer">
+            <p>No Trailer Available</p>
+        </div>
+    </div>
+
+    <div class="info-side">
+        <h1>${movie.title}</h1>
+        
+        <div class="detail-description">
+            <h3>Description</h3>
+            <p id="info-desc">${movie.overview || "No description provided."}</p>
+        </div>
+
+        <div class="detail-actors">
+            <h3>Leading actors</h3>
+            <div id="info-actors" class="actors-list">Custom Entry / No Cast Listed</div>
+        </div>
+
+        <div class="detail-rating">
+            <h3>Rating</h3>
+            <p>⭐ ${(Number(movie.vote_average) || 0).toFixed(1)}/10 (${movie.vote_count || 0} votes)</p>
+        </div>
+
+        <div class="detail-release">
+            <h3>Release Date</h3>
+            <p>${movie.release_date || "Unknown"}</p>
+        </div>
+        
+        <div class="detail-genres">
+            <h3>Genres</h3>
+            <p>${movie.genres ? movie.genres.join(", ") : "None"}</p>
+        </div>
+        <div class="detail-edit">
+            <button class="edit-btn-trigger" style="cursor:pointer; padding: 10px; background: #8205ef; color: white; border: none; border-radius: 5px; width: 100%; margin-bottom: 10px;">
+                Edit Details
+            </button>
+    </div>
     `;
+    //edit movie part
+    const editbttn = document.querySelector(".edit-btn-trigger");
+    editbttn.addEventListener("click", function() {
+    document.querySelector("#custom-name").value = movie.title;
+    document.querySelector("#custom-desc").value = movie.overview;
+    document.querySelector("#custom-genre").value = movie.genres[0];
+    document.querySelector("#custom-date").value = movie.release_date || "";
+    document.querySelector("#custom-rating").value = movie.vote_average || "";
+    document.querySelector("#custom-votes").value = movie.vote_count || "";
+    const allLists = ["addedmovies", "myfav", "mywatched"];
+    
+    allLists.forEach(listName => {//to have the movie edited in watched n favs too
+        let list = JSON.parse(localStorage.getItem(listName)) || [];
+        list = list.filter(m => m.id !== movie.id);
+        localStorage.setItem(listName, JSON.stringify(list));
+    });
+    addmoviestuff.style.display = "block";
+    moviedeats.style.display = "none";
+});
     document.querySelector("#mark-watched").addEventListener("click", function() {
         let watched = JSON.parse(localStorage.getItem("mywatched")) || [];
         if (!watched.some(m => m.id == movie.id)) {
