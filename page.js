@@ -285,6 +285,7 @@ const pageload = function(p){
     movies.innerHTML = " ";
     pages.innerHTML=" ";
 const addedmv = JSON.parse(localStorage.getItem("addedmovies")) || [];//movies i add
+if (p==1){
 addedmv.forEach(movie => {
     movies.innerHTML += `
         <div class="mvelement custom-item" data-id="${movie.id}">
@@ -294,7 +295,7 @@ addedmv.forEach(movie => {
             </div>
             <div class="mvname"><p>${movie.title}</p></div>
         </div>`;
-});
+});}
     fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${currentpage}`,options)//awwal page
     .then(response => response.json())
         .then(d => {
