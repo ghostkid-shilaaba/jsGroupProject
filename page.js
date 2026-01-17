@@ -46,13 +46,20 @@ const sortalphabet =document.querySelector(".sort-alphabet");
 const sidebarcontainer = document.querySelector(".sidebar-container");
 const sortitems = document.querySelectorAll(".sort-item");
 const statscontainer=document.querySelector('.stats-container');//kpi stuff
+const statscontainerDaily=document.querySelector('.stats-container-daily');
 const kpipage=document.querySelectorAll('.kpi');
 let myChart = null;
+let dailyChart = null;
 const addmoviestuff= document.querySelector("#add-movie-modal");//add movie stuff
 const addbutton = document.querySelector(".userinfo"); 
 const closebutton = document.querySelector(".close-btn");
 const form = document.querySelector("#custom-movie-form");
 const customgenreselect=document.querySelector("#custom-genre");
+const catbutt=document.querySelectorAll(".categoriesss");
+const catpage=document.querySelector(".catstuff");
+const catinput=document.querySelector(".catinput");
+const bttncat=document.querySelector(".bttncat");
+
 
 
 
@@ -84,8 +91,10 @@ homebutton.forEach(el => {
     favpage.style.display="none";
     sidebarcontainer.style.display="none";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
     addmoviestuff.style.display="none";
     moviedeats.style.display="none";
+    catpage.style.display="none";
 })
 });
 
@@ -102,8 +111,10 @@ actorsbutton.forEach(el=> {
     watchedpage.style.display="none";
     favpage.style.display="none";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
     addmoviestuff.style.display="none";
     moviedeats.style.display="none";
+    catpage.style.display="none";
 })
 });
 
@@ -125,8 +136,10 @@ searchsend.forEach(el => {
     watchedpage.style.display="none";
     favpage.style.display="none";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
     addmoviestuff.style.display="none";
     moviedeats.style.display="none";
+    catpage.style.display="none";
     let a="";
     searchinput.forEach(el => {
         if (el.value)
@@ -172,8 +185,10 @@ watchedbutton.forEach(el => {
     watchedpage.style.display="block";
     favpage.style.display="none";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
     addmoviestuff.style.display="none";
     moviedeats.style.display="none";
+    catpage.style.display="none";
     showmoviepage();
     })
 });
@@ -189,8 +204,10 @@ favbutton.forEach(el => {
     watchedpage.style.display="none";
     favpage.style.display="block";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
     addmoviestuff.style.display="none";
     moviedeats.style.display="none";
+    catpage.style.display="none";
     favmoviepage();
     })
 });
@@ -224,8 +241,10 @@ kpipage.forEach(el=>{
     watchedpage.style.display="none";
     favpage.style.display="none";
     statscontainer.style.display="block";
+    statscontainerDaily.style.display="block";
     addmoviestuff.style.display="none";
     moviedeats.style.display="none";
+    catpage.style.display="none";
     kpithing();
     })
 })
@@ -243,7 +262,9 @@ addbutton.addEventListener("click", function(){
     watchedpage.style.display="none";
     favpage.style.display="none";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
     moviedeats.style.display="none";
+    catpage.style.display="none";
     
 });
 closebutton.addEventListener("click", function(){
@@ -254,9 +275,175 @@ closebutton.addEventListener("click", function(){
 form.addEventListener("submit", function(){
     saveNewMovie();
 })
+catbutt.forEach(el => {
+    el.addEventListener("click",function(){
+    addmoviestuff.style.display="none";
+    homepage.style.display="none";
+    mainpage.style.display="none";
+    actorspage.style.display="none";
+    mainstuff.style.display="block";
+    moviedeats.style.display="none";
+    searchthing.style.display="none";
+    watchedpage.style.display="none";
+    favpage.style.display="none";
+    statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
+    moviedeats.style.display="none";
+    catpage.style.display="block";
+    displayCategories(); 
+    })
+    
+});
 
 
+const displayCategories = function() {
+    const cats = JSON.parse(localStorage.getItem("cats")) || [];
+    const catpage = document.querySelector(".catstuff");
 
+
+    const categoryList = catpage.querySelector(".categories-list");
+    if(categoryList) {
+        categoryList.remove();
+    }
+    
+    if(cats.length === 0) {
+        console.log("No categories found");
+        return;
+    }
+    
+    
+    const catContainer = document.createElement("div");
+    catContainer.className = "categories-list";
+    
+    cats.forEach((cat, index) => {
+        const catEl = document.createElement("div");
+        catEl.className = "category-item";
+        catEl.innerHTML = `
+            <span class="cat-name">${cat.name || cat}</span>
+            <button class="cat-delete-btn" data-index="${index}">×</button>
+        `;
+        catEl.addEventListener("click", function(e) {
+            if (!e.target.classList.contains("cat-delete-btn")) {
+                showCategoryMovies(cat.name || cat);
+            }
+        });
+        catContainer.appendChild(catEl);
+    });
+    
+    const inputSection = catpage.querySelector(".cat-input-section");
+    if(inputSection) {
+        inputSection.insertAdjacentElement("afterend", catContainer);
+    } else {
+        catpage.appendChild(catContainer);
+    }
+};
+
+document.addEventListener("click", function(e){
+    if(e.target.classList.contains("bttncat")) {
+        e.preventDefault();
+        console.log("bttncat clicked via delegation");
+        const inputElement = document.querySelector(".catinput");
+        const catValue = inputElement.value.trim();
+        console.log("Input value:", catValue);
+        if(!catValue) {
+            alert("Please enter a category");
+            return;
+        }
+        
+        let cats = JSON.parse(localStorage.getItem("cats")) || [];
+        cats.push({
+            id: Date.now(), 
+            name: catValue
+        });
+        localStorage.setItem("cats", JSON.stringify(cats));
+        inputElement.value = "";
+        console.log("Category added:", cats);
+        displayCategories();
+        updateGenreDropdown();
+    }
+    
+    if(e.target.classList.contains("cat-delete-btn")) {
+        e.preventDefault();
+        const index = parseInt(e.target.dataset.index);
+        const catName = e.target.previousElementSibling.textContent;
+        
+        if(confirm(`Are you sure you want to delete "${catName}"?`)) {
+            let cats = JSON.parse(localStorage.getItem("cats")) || [];
+            cats.splice(index, 1);
+            localStorage.setItem("cats", JSON.stringify(cats));
+            console.log("Category deleted");
+            displayCategories();
+            updateGenreDropdown();
+        }
+    }
+});
+
+const updateGenreDropdown = function() {
+    customgenreselect.innerHTML = '<option value="">Select a category</option>';
+    const customCats = JSON.parse(localStorage.getItem("cats")) || [];
+    customCats.forEach(cat => {
+        customgenreselect.innerHTML += 
+            `<option value="${cat.name || cat}">${cat.name || cat}</option>`;
+    });
+};const showCategoryMovies = function(categoryName) {
+    const customMovies = JSON.parse(localStorage.getItem("addedmovies")) || [];
+    const catpage = document.querySelector(".catstuff");
+    
+    const moviesDisplay = catpage.querySelector(".category-movies-display");
+    if(moviesDisplay) {
+        moviesDisplay.remove();
+    }
+    
+    const movieContainer = document.createElement("div");
+    movieContainer.className = "category-movies-display";
+    movieContainer.innerHTML = `<h3 style="text-align: center; margin-top: 20px; margin-bottom: 15px;">Your Movies - Add to "${categoryName}"</h3><div class="category-movies-grid"></div>`;
+    
+    const moviesGrid = movieContainer.querySelector(".category-movies-grid");
+    
+    if(customMovies.length === 0) {
+        moviesGrid.innerHTML = "<p style='text-align: center; grid-column: 1/-1;'>No custom movies found. Add movies first!</p>";
+    } else {
+        customMovies.forEach(movie => {
+            const movieEl = document.createElement("div");
+            movieEl.className = "cat-movie-item";
+            movieEl.innerHTML = `
+                <div class="cat-movie-poster">
+                    <img src="${movie.poster_path}" alt="${movie.title}">
+                </div>
+                <div class="cat-movie-title">${movie.title}</div>
+                <button class="cat-add-movie-btn" data-movie-id="${movie.id}" data-category="${categoryName}">Add to ${categoryName}</button>
+            `;
+            movieEl.querySelector(".cat-add-movie-btn").addEventListener("click", function() {
+                addMovieToCategory(movie, categoryName);
+            });
+            moviesGrid.appendChild(movieEl);
+        });
+    }
+    
+    const categoriesList = catpage.querySelector(".categories-list");
+    if(categoriesList) {
+        categoriesList.insertAdjacentElement("afterend", movieContainer);
+    } else {
+        catpage.appendChild(movieContainer);
+    }
+};
+
+const addMovieToCategory = function(movie, categoryName) {
+    let catMovies = JSON.parse(localStorage.getItem("catMovies")) || {};
+    
+    if(!catMovies[categoryName]) {
+        catMovies[categoryName] = [];
+    }
+    
+    if(catMovies[categoryName].some(m => m.id === movie.id)) {
+        alert("This movie is already in this category!");
+        return;
+    }
+    
+    catMovies[categoryName].push(movie);
+    localStorage.setItem("catMovies", JSON.stringify(catMovies));
+    alert(`Added "${movie.title}" to "${categoryName}"!`);
+};
 
 
 
@@ -296,7 +483,7 @@ addedmv.forEach(movie => {
             <div class="mvname"><p>${movie.title}</p></div>
         </div>`;
 });}
-    fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${currentpage}`,options)//awwal page
+    fetch(`https://api.themoviedb.org/3/movie/popular?language=en-US&page=${currentpage}`,options)
     .then(response => response.json())
         .then(d => {
           d.results.forEach(movie => {
@@ -446,6 +633,8 @@ const movieinfo=function(p){
     watchedpage.style.display="none";
     favpage.style.display="none";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
+    catpage.style.display="none";
     addmoviestuff.style.display="none";
     
     const type = p.media_type || (p.title ? "movie" : "tv");
@@ -490,7 +679,8 @@ const movieinfo=function(p){
                 watchedlisttab.push({
                     id: p.id,
                     type: p.media_type,
-                    genres: d.genres.map(g => g.name)
+                    genres: d.genres.map(g => g.name),
+                    watchedDate: new Date().toISOString()
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));
                 alert("saved to your watchedlist");
@@ -508,7 +698,8 @@ const movieinfo=function(p){
                 watchedlisttab.push({
                     id: p.id,
                     type: p.media_type,
-                    genres: d.genres.map(g => g.name)
+                    genres: d.genres.map(g => g.name),
+                    watchedDate: new Date().toISOString()
                 })
                 localStorage.setItem("mywatched", JSON.stringify(watchedlisttab));//bach y koun f favs darori ykoun f watched
             }
@@ -551,11 +742,13 @@ const showmoviepage=function(){
             const dels =document.querySelectorAll(`.delete-watch-btn`);
             dels.forEach(del => {
              del.addEventListener("click", function(){
+                if(confirm("Are you sure you want to remove this from watched?")) {
                 const idToDel = this.getAttribute("data-id");
                 let currentwatched = JSON.parse(localStorage.getItem("mywatched"));
                 currentwatched = currentwatched.filter(m => m.id != idToDel);
                 localStorage.setItem("mywatched", JSON.stringify(currentwatched));
                 showmoviepage()
+                }
            });
           
            })
@@ -573,11 +766,13 @@ const showmoviepage=function(){
            const dels =document.querySelectorAll(`.delete-watch-btn`);
            dels.forEach(del => {
              del.addEventListener("click", function(){
+                if(confirm("Are you sure you want to remove this from watched?")) {
                 const idToDel = this.getAttribute("data-id");
                 let currentwatched = JSON.parse(localStorage.getItem("mywatched"));
                 currentwatched = currentwatched.filter(m => m.id != idToDel);
                 localStorage.setItem("mywatched", JSON.stringify(currentwatched));
                 showmoviepage()
+                }
            });
           
            })
@@ -611,11 +806,13 @@ const favmoviepage=function(){
             const dels =document.querySelectorAll(`.delete-fav-btn`);
             dels.forEach(del => {
              del.addEventListener("click", function(){
+                if(confirm("Are you sure you want to remove this from favorites?")) {
                 const idToDel = this.getAttribute("data-id");
                 let currentFavs = JSON.parse(localStorage.getItem("myfav"));
                 currentFavs = currentFavs.filter(m => m.id != idToDel);
                 localStorage.setItem("myfav", JSON.stringify(currentFavs));
                 favmoviepage()
+                }
            });
           
            })
@@ -633,11 +830,13 @@ const favmoviepage=function(){
            const dels =document.querySelectorAll(`.delete-fav-btn`);
            dels.forEach(del => {
              del.addEventListener("click", function(){
+                if(confirm("Are you sure you want to remove this from favorites?")) {
                 const idToDel = this.getAttribute("data-id");
                 let currentFavs = JSON.parse(localStorage.getItem("myfav"));
                 currentFavs = currentFavs.filter(m => m.id != idToDel);
                 localStorage.setItem("myfav", JSON.stringify(currentFavs));
                 favmoviepage()
+                }
            });
           
            })
@@ -660,8 +859,13 @@ fetch("https://api.themoviedb.org/3/genre/movie/list?language=en",options)//genr
          data.genres.forEach(el => {
              genre.innerHTML+=
                 `<option value="${el.id}">${el.name}</option>`;
-            customgenreselect.innerHTML += 
-                `<option value="${el.name}">${el.name}</option>`;
+            });
+            if(!localStorage.getItem("cats")){localStorage.setItem("cats",JSON.stringify(data.genres))}
+            
+            const customCats = JSON.parse(localStorage.getItem("cats")) || [];
+            customCats.forEach(cat => {
+                customgenreselect.innerHTML += 
+                    `<option value="${cat.name || cat}">${cat.name || cat}</option>`;
             });
         })
     .catch(error => console.error(error));
@@ -687,7 +891,7 @@ const display = function(moviearr) { //bach man3adch bzzf ki dir nfs haja 4 mrra
         });
     });
 };
-const loadgenres =function(currentgenre, sort = "popularity.desc", page = 1){//func cuz i wan confused oterwise hhhhh
+const loadgenres =function(currentgenre, sort = "popularity.desc", page = 1){//func cuz i wan confused otherwise hhhhh
     sidebarcontainer.style.display="block";
     homepage.style.display = "block";
     mainstuff.style.display = "block";
@@ -698,8 +902,10 @@ const loadgenres =function(currentgenre, sort = "popularity.desc", page = 1){//f
     watchedpage.style.display = "none";
     favpage.style.display = "none";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
     addmoviestuff.style.display="none";
     moviedeats.style.display="none";
+    catpage.style.display="none";
     movies.innerHTML = "";
     pages.innerHTML = "";
     
@@ -741,10 +947,81 @@ const loadgenres =function(currentgenre, sort = "popularity.desc", page = 1){//f
 }
 //chart part
 const kpithing = function(){
-    const favlist = JSON.parse(localStorage.getItem("myfav")) || [];
-    if (favlist.length==0){return;}
+    const addedMovies = JSON.parse(localStorage.getItem("addedmovies")) || [];
+    const watchedMovies = JSON.parse(localStorage.getItem("mywatched")) || [];
+    const favMovies = JSON.parse(localStorage.getItem("myfav")) || [];
+    
+    document.querySelector("#kpi-movies-added").textContent = addedMovies.length;
+    document.querySelector("#kpi-movies-watched").textContent = watchedMovies.length;
+    document.querySelector("#kpi-movies-fav").textContent = favMovies.length;
+    
+    if (watchedMovies.length > 0) {
+        const dailyData = {};
+        const today = new Date();
+        
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            const dateStr = date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+            dailyData[dateStr] = 0;
+        }
+        
+        watchedMovies.forEach(movie => {
+            if (movie.watchedDate) {
+                const watchDate = new Date(movie.watchedDate);
+                const dateStr = watchDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+                if (dailyData.hasOwnProperty(dateStr)) {
+                    dailyData[dateStr]++;
+                }
+            }
+        });
+        
+        const dailyLabels = Object.keys(dailyData);
+        const dailyCounts = Object.values(dailyData);
+        
+        const dailyCtx = document.querySelector('#dailyWatchedChart').getContext('2d');
+        
+        if (dailyChart) { dailyChart.destroy(); }
+        
+        dailyChart = new Chart(dailyCtx, {
+            type: 'bar',
+            data: {
+                labels: dailyLabels,
+                datasets: [{
+                    label: 'Movies Watched',
+                    data: dailyCounts,
+                    backgroundColor: '#8205ef',
+                    borderColor: '#8205ef',
+                    borderWidth: 2,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    x: {
+                        ticks: { color: 'white' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: 'white' }
+                    }
+                }
+            }
+        });
+    }
+    
+    // Genre chart
+    if (favMovies.length==0){return;}
     count={};
-    favlist.forEach(el => {
+    favMovies.forEach(el => {
         el.genres.forEach(g=>{
             count[g]=(count[g]||0) +1;//so we could in the end see how many times is a genre present
         })
@@ -830,7 +1107,9 @@ const showMyCustomInfo = function(id) {
     watchedpage.style.display="none";
     favpage.style.display="none";
     statscontainer.style.display="none";
+    statscontainerDaily.style.display="none";
     moviedeats.style.display="block";
+    catpage.style.display="none";
     mediaside.innerHTML = `
         <div class="media-side">
         <div class="detail-pic">
