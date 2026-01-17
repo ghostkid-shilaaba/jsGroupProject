@@ -18,6 +18,7 @@
     <p class="mpstuff actorsbutton">Actors n directors</p>
     <p class="mpstuff watched">Watched</p>
     <p class="mpstuff kpi">Kpi</p>
+    <p class="mpstuff categoriesss">categories</p>
     </div>
     <div class="first-searchbar">
     <input class="first-search search-input" type="search" placeholder="search">
@@ -55,6 +56,7 @@
     </footer>
     
     </div>
+    
     <!--home page starts here-->
     <div class="mainstuff">
         <div class="navbar">
@@ -83,6 +85,7 @@
                     <li class="second-sublist actorsbutton">People</li>
                     <li class="second-sublist watched">Watched</li>
                     <li class="second-sublist kpi">Kpi</li>
+                    <li class="second-sublist categoriesss">categories</li>
                 </ul>
             </div>
     </div>
@@ -185,9 +188,30 @@
 </div>
 <!-- chart part -->
  <div class="stats-container">
-    <h2 class="sidebar-title" style="text-align: center;">your liked genres</h2>
+    <div class="kpi-cards">
+        <div class="kpi-card">
+            <h3>Movies Added</h3>
+            <p id="kpi-movies-added" class="kpi-value">0</p>
+        </div>
+        <div class="kpi-card">
+            <h3>Movies Watched</h3>
+            <p id="kpi-movies-watched" class="kpi-value">0</p>
+        </div>
+        <div class="kpi-card">
+            <h3>Favorite Movies</h3>
+            <p id="kpi-movies-fav" class="kpi-value">0</p>
+        </div>
+    </div>
+    <h2 class="sidebar-title" style="text-align: center; margin-top: 30px;">your liked genres</h2>
     <div class="chart-wrapper">
         <canvas id="genreChart"></canvas>
+    </div>
+</div>
+
+<div class="stats-container-daily">
+    <h2 class="sidebar-title" style="text-align: center;">movies watched per day</h2>
+    <div class="chart-wrapper">
+        <canvas id="dailyWatchedChart"></canvas>
     </div>
 </div>
 <!-- add movie -->
@@ -225,6 +249,13 @@
         </form>
     </div>
 </div>
+<!-- cat page -->
+    <div class="catstuff">
+        <div class="cat-input-section">
+            <input class="catinput" type="text" placeholder="Enter category name">
+            <button type="button" class="bttncat">add</button>
+        </div>
+    </div>
 <script src="page.js"></script>
 </body>
 </html>
